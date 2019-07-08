@@ -28,14 +28,17 @@ var (
 	version string // injected via ldflags at build time
 
 	TruePredicate = Predicate{
-		Name: "always_true",
+		//Name: "always_true",
+		Name: "skip",
 		Func: func(pod v1.Pod, node v1.Node) (bool, error) {
+			log.Print("info: pass predicate")
 			return true, nil
 		},
 	}
 
 	ZeroPriority = Prioritize{
-		Name: "zero_score",
+		Name: "zero",
+		//Name: "zero_score",
 		Func: func(_ v1.Pod, nodes []v1.Node) (*schedulerapi.HostPriorityList, error) {
 			var priorityList schedulerapi.HostPriorityList
 			priorityList = make([]schedulerapi.HostPriority, len(nodes))
@@ -113,8 +116,10 @@ func main() {
 
 	AddBind(router, NoBind)
 
-	log.Print("info: server starting on the port :80")
-	if err := http.ListenAndServe(":80", router); err != nil {
+	log.Print("info: server starting on the port :8080")
+	//log.Print("info: server starting on the port :80")
+	if err := http.ListenAndServe(":8080", router); err != nil {
+		//if err := http.ListenAndServe(":80", router); err != nil {
 		log.Fatal(err)
 	}
 }
